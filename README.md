@@ -7,7 +7,7 @@ La inspección visual de productos industriales es una tarea crítica en manufac
 
 Este proyecto aborda la detección de anomalías visuales en productos industriales como un problema no supervisado: el modelo se entrena exclusivamente con imágenes normales y detecta defectos en inferencia a partir del error de reconstrucción. Una imagen que el modelo no logra reconstruir fielmente se considera anómala. Este enfoque elimina la dependencia de datos etiquetados de defectos y es directamente aplicable a escenarios industriales reales donde dichos datos no están disponibles.
 
-El proyecto implementa y compara tres niveles de complejidad arquitectónica — un autoencoder denso como baseline, un VAE convolucional entrenado desde cero, y un autoencoder con encoder ResNet-18 preentrenado con fine-tuning — evaluados sobre el dataset MVTec AD, benchmark estándar para detección de anomalías industriales. El desempeño de cada arquitectura se mide con AUROC (área bajo la curva ROC), métrica estándar para este tipo de problema que cuantifica qué tan bien el error de reconstrucción separa imágenes normales de defectuosas independientemente de un umbral fijo.
+El proyecto implementa y compara tres niveles de complejidad arquitectónica — un autoencoder denso como baseline, un autoencoder convolucional entrenado desde cero, y un autoencoder con encoder ResNet-18 preentrenado con fine-tuning — evaluados sobre el dataset MVTec AD, benchmark estándar para detección de anomalías industriales. El desempeño de cada arquitectura se mide con AUROC (área bajo la curva ROC), métrica estándar para este tipo de problema que cuantifica qué tan bien el error de reconstrucción separa imágenes normales de defectuosas independientemente de un umbral fijo.
 
 ## Datos
 
@@ -24,7 +24,7 @@ Se elige un Autoencoder denso (fully connected) como arquitectura base por la si
 
 ## Arquitectura propuesta según la naturaleza de los datos
 
-Dado que los datos son imágenes de alta resolución de productos industriales sin etiquetas de defecto, se propone un Autoencoder Variacional Convolucional (Conv VAE). El encoder convolucional comprime la imagen en una distribución gaussiana en el espacio latente, produciendo una media y una varianza. A partir de esa distribución se muestrea un vector latente de forma diferenciable mediante el reparameterization trick. El decoder convolucional reconstruye la imagen original a partir de ese vector. El modelo se entrena únicamente con imágenes normales, por lo que el error de reconstrucción actúa como indicador de anomalía.
+Dado que los datos son imágenes de alta resolución de productos industriales sin etiquetas de defecto, se propone un Autoencoder Convolucional (ConvAE). El encoder convolucional comprime la imagen en una representación espacial compacta mediante bloques sucesivos de convolución y pooling. El decoder convolucional reconstruye la imagen original a partir de esa representación mediante bloques de upsampling. El modelo se entrena únicamente con imágenes normales, por lo que el error de reconstrucción actúa como indicador de anomalía.
 
 ## Arquitectura con transfer learning
 
